@@ -13,11 +13,16 @@ user$ git commit -m "add the js-testing-framework library as submodule" .gitmodu
 user$ git push
 ```
 
-### 0.2 Update submodule
+### 0.2 Update submodule to the latest master version
 
 ```bash
 user$ cd project
 user$ cd vendor/js-testing-framework
+user$ git pull origin master
+user$ cd ../..
+user$ git add vendor/js-testing-framework
+user$ git commit -m "update the js-testing-framework library submodule" vendor/js-testing-framework
+user$ git push
 ```
 
 ## 1. Usage
