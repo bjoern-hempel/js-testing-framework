@@ -7,7 +7,7 @@ This is a small testing framework to make test driven development and unit testi
 ### 0.1 Add this library as git submodule
 
 ```bash
-user$ cd project
+user$ cd /your/root/project/path
 user$ git submodule add https://github.com/bjoern-hempel/js-testing-framework.git vendor/js-testing-framework
 user$ git commit -m "add the js-testing-framework library as submodule" .gitmodules vendor/js-testing-framework
 user$ git push
@@ -16,7 +16,7 @@ user$ git push
 ### 0.2 Update submodule to the latest master version
 
 ```bash
-user$ cd project
+user$ cd /your/root/project/path
 user$ cd vendor/js-testing-framework
 user$ git pull origin master
 user$ cd ../..
