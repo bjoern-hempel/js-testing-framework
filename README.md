@@ -4,7 +4,11 @@ This is a small testing framework to make test driven development and unit testi
 
 ## 0. Introduction
 
-Coming soon..
+```bash
+user$ cd project
+user$ git submodule add https://github.com/bjoern-hempel/js-testing-framework.git vendor/js-testing-framework
+user$ git submodule add git@github.com:bjoern-hempel/js-testing-framework.git vendor/js-testing-framework
+```
 
 ## 1. Usage
 
