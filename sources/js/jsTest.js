@@ -1,4 +1,66 @@
 /**
+ * The js test type class.
+ *
+ * @author  Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2018-06-08)
+ */
+class JsTestType {
+
+    static get SUCCESS() {
+        return 'success';
+    }
+
+    static get ERROR() {
+        return 'error';
+    }
+
+    /**
+     * The class constructor.
+     *
+     * @param type
+     */
+    constructor(type) {
+        this.type = type === 'error' ? 'error' : 'success';
+    }
+
+    /**
+     * To string function.
+     *
+     * @returns {string|*}
+     */
+    toString() {
+        return this.type;
+    }
+}
+
+/**
+ * The js test mode class.
+ *
+ * @author  Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2018-06-08)
+ */
+class JsTestMode {
+
+    /**
+     * The class constructor.
+     *
+     * @param mode
+     */
+    constructor(mode) {
+        this.mode = mode;
+    }
+
+    /**
+     * To string function.
+     *
+     * @returns {string|*}
+     */
+    toString() {
+        return this.mode;
+    }
+}
+
+/**
  * A class to test the matrix class.
  *
  * @author  Björn Hempel <bjoern@hempel.li>
@@ -14,20 +76,65 @@ class JsTest {
      * @param testFunction
      * @param errorFunction
      */
-    constructor(messageCode, testFunction, errorFunction) {
+    constructor() {
+        this.testFunction = this.testFunction;
+        this.errorFunction = this.errorFunction;
+        this.message = 'js-testing-framework test';
         this.mode = null;
-
-        if (!(messageCode instanceof Array)) {
-            this.mode = messageCode.mode;
-            messageCode = messageCode.config;
-        }
-
-        this.message = messageCode[2];
-        this.code = messageCode[1];
-        this.originClass = messageCode[0];
-        this.testFunction = testFunction;
-        this.errorFunction = typeof errorFunction === 'function' ? errorFunction : this.errFunc;
+        this.code = null;
+        this.type = '';
+        this.originClass = null;
         this.testOK = false;
+        this.errorClass = Error;
+
+        var functionCounter = 0;
+        [].forEach.call(arguments, function (argument) {
+            switch (true) {
+                /* error/success type given */
+                case argument instanceof JsTestType:
+                    this.type = String(argument);
+                    break;
+
+                /* mode given */
+                case argument instanceof JsTestMode:
+                    this.mode = String(argument);
+                    break;
+
+                case argument instanceof JsTestException:
+                    this.errorClass = JsTestException;
+                    this.code = argument.code;
+                    break;
+
+                /* string given */
+                case typeof argument === 'string':
+                    this.message = argument;
+                    break;
+
+                /* number given */
+                case typeof argument === 'number':
+                    this.code = parseInt(argument);
+                    break;
+
+                /* function given */
+                case typeof argument === 'function':
+                    switch (functionCounter) {
+                        /* first function -> test function */
+                        case 0:
+                            this.testFunction = argument;
+                            break;
+
+                        /* second function -> error function */
+                        case 1:
+                            this.errorFunction = argument;
+                            break;
+                    }
+                    functionCounter++;
+                    break;
+
+                default:
+                    console.log(typeof argument);
+            }
+        }, this);
 
         /* start the test */
         this.start();
@@ -36,16 +143,25 @@ class JsTest {
     /**
      * This is the default error function if no one given.
      *
+     * @param error
+     * @returns {boolean}
+     */
+    errorFunction(error) {
+        if (this.code) {
+            return (error instanceof this.errorClass) && this.code === error.code;
+        } else {
+            return (error instanceof this.errorClass);
+        }
+    }
+
+    /**
+     * This is the default error function if no one given.
+     *
      * @param err
      * @returns {boolean}
      */
-    errFunc(err) {
-        /* This is a success test -> an exception should never be thrown. */
-        if (this.code >= 200) {
-            return false;
-        }
-
-        return (err instanceof JsTestException) && (err.code === this.code);
+    testFunction(success) {
+        return false;
     }
 
     /**
@@ -55,12 +171,14 @@ class JsTest {
         this.constructor.increaseCounter();
 
         this.log(
-            String('%counter) %class: Running %status test "%message" %add(Code: %code).').
-                replace(/%class/, this.originClass.CLASS_NAME).
+            String('%counter) %classRunning %statustest "%message" %mode%code.').
                 replace(/%counter/, String(JsTest.getCounter()).padStart(3)).
-                replace(/%status/, this.code >= 200 ? 'success' : 'error').
-                replace(/%message/, this.message).replace(/%code/, this.code).
-                replace(/%add/, this.mode !== null ? '[mode: ' + this.mode + '] ' : '')
+                replace(/%class/,   this.originClass   ? this.originClass.CLASS_NAME + ': ' : '').
+                replace(/%status/,  this.type          ? this.type + ' '                    : '').
+                replace(/%message/, this.message).
+                replace(/%mode/,    this.mode !== null ? '[mode: ' + this.mode + '] '       : '').
+                replace(/%code/,    this.code          ? '(Code: ' + this.code + ')'        : ''),
+            'info'
         );
 
         /* reset counters */
@@ -73,11 +191,8 @@ class JsTest {
         var timeStart = performance.now();
         try {
             this.testOK = this.testFunction.call(this);
-        } catch (err) {
-            this.testOK = this.errorFunction.call(this, err);
-            if (!this.testOK) {
-                console.error(err.toString());
-            }
+        } catch (error) {
+            this.testOK = this.errorFunction.call(this, error);
         }
         var timeFinished = performance.now();
 
@@ -85,9 +200,9 @@ class JsTest {
 
         var message = this.testOK ? 'Test succeeded (%time).' : 'Test failed (%time).';
 
-        message = '     ' + message.replace('%time', timeNeeded + ' ms');
+        message = '     → ' + message.replace('%time', timeNeeded + ' ms');
 
-        this.testOK ? this.log(message, 'info') : this.log(message, 'error');
+        this.testOK ? this.log(message, 'success') : this.log(message, 'error');
 
         if (!this.testOK) {
             this.constructor.increaseErrorCounter();
@@ -187,9 +302,9 @@ class JsTest {
 
         var message = String('Start test "%title"').replace(/%title/, title);
 
-        this.log('-'.repeat(message.length));
+        this.log('─'.repeat(message.length));
         this.log(message);
-        this.log('-'.repeat(message.length));
+        this.log('─'.repeat(message.length));
         this.log('');
 
         this.timeStart = performance.now();
@@ -223,10 +338,10 @@ class JsTest {
             replace('%testsAll', this.getAllCounter());
 
         this.log('');
-        this.log('-'.repeat(message.length));
+        this.log('─'.repeat(message.length));
         this.log('RESULT');
         JsTest.getErrorCounter() <= 0 ? this.log(message, 'info') : this.log(message, 'error');
-        this.log('-'.repeat(message.length));
+        this.log('─'.repeat(message.length));
     }
 
     /**
@@ -408,16 +523,16 @@ class JsTest {
      */
     static log(logValue, type) {
         switch (type) {
-            case 'info':
-                this.doLog(console.info, logValue, '');
+            case 'success':
+                this.doLog(console.log, logValue, 'color: green; font-weight: bold; ');
                 return;
 
             case 'warn':
-                this.doLog(console.warn, logValue, '');
+                this.doLog(console.log, logValue, 'color: orange; font-weight: bold; ');
                 return;
 
             case 'error':
-                this.doLog(console.error, logValue, 'color: red; ');
+                this.doLog(console.log, logValue, 'color: red; font-weight: bold; ');
                 return;
 
             default:
