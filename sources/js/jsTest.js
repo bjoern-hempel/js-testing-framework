@@ -148,7 +148,9 @@ class JsTest {
      */
     errorFunction(error) {
         if (this.code) {
-            return (error instanceof this.errorClass) && this.code === error.code;
+            var code = 'code' in error ? error.code : parseInt(error.message);
+
+            return (error instanceof this.errorClass) && this.code === code;
         } else {
             return (error instanceof this.errorClass);
         }
