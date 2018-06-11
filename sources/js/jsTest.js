@@ -61,7 +61,7 @@ class JsTestMode {
 }
 
 /**
- * A class to test the matrix class.
+ * The js test class.
  *
  * @author  Björn Hempel <bjoern@hempel.li>
  * @version 1.0 (2018-05-13)
@@ -568,5 +568,53 @@ class JsTest {
         pre.innerHTML = logValue ? logValue : ' ';
 
         document.getElementById('testResult').appendChild(pre);
+    }
+}
+
+/**
+ * The js success test class.
+ *
+ * @author  Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2018-06-11)
+ */
+class JsSuccessTest extends JsTest {
+
+    /**
+     * The constructor of JsSuccessTest.
+     *
+     * @param message
+     * @param code
+     * @param testFunction
+     * @param errorFunction
+     */
+    constructor() {
+        super(
+            new JsTestType(JsTestType.SUCCESS),
+            ...arguments
+        );
+    }
+}
+
+/**
+ * The js error test class.
+ *
+ * @author  Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2018-06-11)
+ */
+class JsErrorTest extends JsTest {
+
+    /**
+     * The constructor of JsErrorTest.
+     *
+     * @param message
+     * @param code
+     * @param testFunction
+     * @param errorFunction
+     */
+    constructor() {
+        super(
+            new JsTestType(JsTestType.ERROR),
+            ...arguments
+        );
     }
 }
