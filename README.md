@@ -27,6 +27,8 @@ user$ git push
 
 ## 1. Usage
 
+### 1.1 Basi
+
 ```javascript
 var tests = function () {
 
