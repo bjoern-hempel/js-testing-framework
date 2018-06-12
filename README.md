@@ -27,7 +27,48 @@ user$ git push
 
 ## 1. Usage
 
-Coming soon..
+```javascript
+var tests = function () {
+
+    /* simple success test */
+    new JsSuccessTest(
+        'check 1 + 2',
+        function () {
+            var sum = 1 + 2;
+
+            return JsTest.equalInteger(sum, 3);
+        }
+    );
+
+    /* simple Error test */
+    new JsErrorTest(
+        'check 1 + 2',
+        100,
+        function () {
+            var sum = 1 + 2;
+
+            throw new Error('100 - Simple Error test');
+
+            return JsTest.equalInteger(sum, 3);
+        }
+    );
+
+    /* simple error test */
+    new JsErrorTest(
+        'check 1 + 2',
+        new JsTestException(100),
+        function () {
+            var sum = 1 + 2;
+
+            throw new JsTestException(100, 'Simple JsTestException test');
+
+            return JsTest.equalInteger(sum, 3);
+        }
+    );
+}
+
+JsTest.startTests('Simple tests.', tests);
+```
 
 ## A. Authors
 
