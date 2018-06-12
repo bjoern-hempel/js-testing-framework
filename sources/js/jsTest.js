@@ -87,57 +87,73 @@ class JsTest {
         this.testOK = false;
         this.errorClass = Error;
 
-        var functionCounter = 0;
+        this.functionCounter = 0;
         [].forEach.call(arguments, function (argument) {
-            switch (true) {
-                /* error/success type given */
-                case argument instanceof JsTestType:
-                    this.type = String(argument);
-                    break;
-
-                /* mode given */
-                case argument instanceof JsTestMode:
-                    this.mode = String(argument);
-                    break;
-
-                case argument instanceof JsTestException:
-                    this.errorClass = JsTestException;
-                    this.code = argument.code;
-                    break;
-
-                /* string given */
-                case typeof argument === 'string':
-                    this.message = argument;
-                    break;
-
-                /* number given */
-                case typeof argument === 'number':
-                    this.code = parseInt(argument);
-                    break;
-
-                /* function given */
-                case typeof argument === 'function':
-                    switch (functionCounter) {
-                        /* first function -> test function */
-                        case 0:
-                            this.testFunction = argument;
-                            break;
-
-                        /* second function -> error function */
-                        case 1:
-                            this.errorFunction = argument;
-                            break;
-                    }
-                    functionCounter++;
-                    break;
-
-                default:
-                    console.log(typeof argument);
-            }
+            this.doArgument(argument);
         }, this);
 
         /* start the test */
         this.start();
+    }
+
+    /**
+     * Assume the given argument List
+     *
+     * @param argumentList
+     */
+    doArgument(argument) {
+
+        switch (true) {
+            case argument instanceof Array:
+                [].forEach.call(argument, function(arg) {
+                    this.doArgument(arg);
+                }, this);
+                break;
+
+            /* error/success type given */
+            case argument instanceof JsTestType:
+                this.type = String(argument);
+                break;
+
+            /* mode given */
+            case argument instanceof JsTestMode:
+                this.mode = String(argument);
+                break;
+
+            case argument instanceof JsTestException:
+                this.errorClass = JsTestException;
+                this.code = argument.code;
+                break;
+
+            /* string given */
+            case typeof argument === 'string':
+                this.message = argument;
+                break;
+
+            /* number given */
+            case typeof argument === 'number':
+                this.code = parseInt(argument);
+                break;
+
+            /* function given */
+            case typeof argument === 'function':
+                switch (this.functionCounter) {
+                    /* first function -> test function */
+                    case 0:
+                        this.testFunction = argument;
+                        break;
+
+                    /* second function -> error function */
+                    case 1:
+                        this.errorFunction = argument;
+                        break;
+                }
+                this.functionCounter++;
+                break;
+
+            default:
+                console.log(typeof argument);
+        }
     }
 
     /**
