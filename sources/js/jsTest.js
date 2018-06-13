@@ -83,7 +83,7 @@ class JsTest {
         this.mode = null;
         this.code = null;
         this.type = '';
-        this.originClass = null;
+        this.originClassName = null;
         this.testOK = false;
         this.errorClass = Error;
 
@@ -123,6 +123,11 @@ class JsTest {
             case argument instanceof JsTestException:
                 this.errorClass = JsTestException;
                 this.code = argument.code;
+                break;
+
+            /* string given */
+            case typeof argument === 'object':
+                this.originClassName = argument.constructor.name;
                 break;
 
             /* string given */
@@ -191,7 +196,7 @@ class JsTest {
         this.log(
             String('%counter) %classRunning %statustest "%message" %mode%code.').
                 replace(/%counter/, String(JsTest.getCounter()).padStart(3)).
-                replace(/%class/,   this.originClass   ? this.originClass.CLASS_NAME + ': ' : '').
+                replace(/%class/,   this.originClassName   ? this.originClassName + ': ' : '').
                 replace(/%status/,  this.type          ? this.type + ' '                    : '').
                 replace(/%message/, this.message).
                 replace(/%mode/,    this.mode !== null ? '[mode: ' + this.mode + '] '       : '').
