@@ -102,8 +102,8 @@ class JsTest {
      * @param argumentList
      */
     doArgument(argument) {
-
         switch (true) {
+            /* Array given -> analyse the array with the following types */
             case argument instanceof Array:
                 [].forEach.call(argument, function(arg) {
                     this.doArgument(arg);
@@ -120,12 +120,17 @@ class JsTest {
                 this.mode = String(argument);
                 break;
 
+            /* JsTestException given */
             case argument instanceof JsTestException:
                 this.errorClass = JsTestException;
                 this.code = argument.code;
+
+                if (argument.message) {
+                    this.message = argument.message;
+                }
                 break;
 
-            /* string given */
+            /* object (class) given */
             case typeof argument === 'object':
                 this.originClass = argument;
                 break;
@@ -138,6 +143,11 @@ class JsTest {
             /* number given */
             case typeof argument === 'number':
                 this.code = parseInt(argument);
+                break;
+
+            /* origin class given */
+            case typeof argument === 'function' && 'CLASS_NAME' in argument:
+                this.originClass = argument;
                 break;
 
             /* function given */
@@ -193,10 +203,16 @@ class JsTest {
     start() {
         this.constructor.increaseCounter();
 
+        /* build class name */
+        var className = '';
+        if (this.originClass) {
+            className = ('CLASS_NAME' in this.originClass ? this.originClass['CLASS_NAME'] : this.originClass.constructor.name) + ': ';
+        }
+
         this.log(
             String('%counter) %classRunning %statustest "%message" %mode%code.').
                 replace(/%counter/, String(JsTest.getCounter()).padStart(3)).
-                replace(/%class/,   this.originClass   ? this.originClass.constructor.name + ': ' : '').
+                replace(/%class/,   className).
                 replace(/%status/,  this.type          ? this.type + ' '                    : '').
                 replace(/%message/, this.message).
                 replace(/%mode/,    this.mode !== null ? '[mode: ' + this.mode + '] '       : '').
@@ -331,13 +347,11 @@ class JsTest {
         this.log('');
 
         this.timeStart = performance.now();
-
         [].slice.call(arguments).map(function (argument) {
             if (typeof argument === 'function') {
                 argument();
             }
         });
-
         this.resultTests();
     }
 
