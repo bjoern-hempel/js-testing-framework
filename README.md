@@ -33,39 +33,38 @@ user$ git push
 var tests = function () {
 
     /* simple success test */
-    new JsSuccessTest(
+    new JsSuccessTest([
         'check 1 + 2',
-        function () {
+        new JsTestTestFunction(function () {
             var sum = 1 + 2;
 
             return JsTest.equalInteger(sum, 3);
-        }
-    );
+        })
+    ]);
 
     /* simple Error test */
     new JsErrorTest(
         'check 1 + 2',
         100,
-        function () {
+        new JsTestTestFunction(function () {
             var sum = 1 + 2;
 
             throw new Error('100 - Simple Error test');
 
             return JsTest.equalInteger(sum, 3);
-        }
+        })
     );
 
     /* simple error test */
     new JsErrorTest(
-        'check 1 + 2',
-        new JsTestException(100),
-        function () {
+        new JsTestException(100, 'check 1 + 2'),
+        new JsTestTestFunction(function () {
             var sum = 1 + 2;
 
-            throw new JsTestException(100, 'Simple JsTestException test');
+            throw new JsTestException(100, 'check 1 + 2');
 
             return JsTest.equalInteger(sum, 3);
-        }
+        })
     );
 }
 
