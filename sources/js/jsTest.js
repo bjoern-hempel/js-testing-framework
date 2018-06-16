@@ -1,66 +1,4 @@
 /**
- * The js test type class.
- *
- * @author  Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2018-06-08)
- */
-class JsTestType {
-
-    static get SUCCESS() {
-        return 'success';
-    }
-
-    static get ERROR() {
-        return 'error';
-    }
-
-    /**
-     * The class constructor.
-     *
-     * @param type
-     */
-    constructor(type) {
-        this.type = type === 'error' ? 'error' : 'success';
-    }
-
-    /**
-     * To string function.
-     *
-     * @returns {string|*}
-     */
-    toString() {
-        return this.type;
-    }
-}
-
-/**
- * The js test mode class.
- *
- * @author  Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2018-06-08)
- */
-class JsTestMode {
-
-    /**
-     * The class constructor.
-     *
-     * @param mode
-     */
-    constructor(mode) {
-        this.mode = mode;
-    }
-
-    /**
-     * To string function.
-     *
-     * @returns {string|*}
-     */
-    toString() {
-        return this.mode;
-    }
-}
-
-/**
  * The js test class.
  *
  * @author  Björn Hempel <bjoern@hempel.li>
@@ -77,8 +15,6 @@ class JsTest {
      * @param errorFunction
      */
     constructor() {
-        this.testFunction = this.testFunction;
-        this.errorFunction = this.errorFunction;
         this.message = 'js-testing-framework test';
         this.mode = null;
         this.code = null;
@@ -87,7 +23,6 @@ class JsTest {
         this.testOK = false;
         this.errorClass = Error;
 
-        this.functionCounter = 0;
         [].forEach.call(arguments, function (argument) {
             this.doArgument(argument);
         }, this);
@@ -130,6 +65,16 @@ class JsTest {
                 }
                 break;
 
+            /* test function given */
+            case argument instanceof JsTestTestFunction:
+                this.testFunction = argument.testFunction;
+                break;
+
+            /* error function given */
+            case argument instanceof JsTestErrorFunction:
+                this.errorFunction = argument.errorFunction;
+                break;
+
             /* object (class) given */
             case typeof argument === 'object':
                 this.originClass = argument;
@@ -146,24 +91,8 @@ class JsTest {
                 break;
 
             /* origin class given */
-            case typeof argument === 'function' && 'CLASS_NAME' in argument:
-                this.originClass = argument;
-                break;
-
-            /* function given */
             case typeof argument === 'function':
-                switch (this.functionCounter) {
-                    /* first function -> test function */
-                    case 0:
-                        this.testFunction = argument;
-                        break;
-
-                    /* second function -> error function */
-                    case 1:
-                        this.errorFunction = argument;
-                        break;
-                }
-                this.functionCounter++;
+                this.originClass = argument;
                 break;
 
             default:
@@ -206,7 +135,7 @@ class JsTest {
         /* build class name */
         var className = '';
         if (this.originClass) {
-            className = ('CLASS_NAME' in this.originClass ? this.originClass['CLASS_NAME'] : this.originClass.constructor.name) + ': ';
+            className = ('name' in this.originClass ? this.originClass.name : this.originClass.constructor.name) + ': ';
         }
 
         this.log(
@@ -651,5 +580,103 @@ class JsErrorTest extends JsTest {
             new JsTestType(JsTestType.ERROR),
             ...arguments
         );
+    }
+}
+
+/**
+ * The js test type class.
+ *
+ * @author  Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2018-06-08)
+ */
+class JsTestType {
+
+    static get SUCCESS() {
+        return 'success';
+    }
+
+    static get ERROR() {
+        return 'error';
+    }
+
+    /**
+     * The class constructor.
+     *
+     * @param type
+     */
+    constructor(type) {
+        this.type = type === 'error' ? 'error' : 'success';
+    }
+
+    /**
+     * To string function.
+     *
+     * @returns {string|*}
+     */
+    toString() {
+        return this.type;
+    }
+}
+
+/**
+ * The js test mode class.
+ *
+ * @author  Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2018-06-08)
+ */
+class JsTestMode {
+
+    /**
+     * The class constructor.
+     *
+     * @param mode
+     */
+    constructor(mode) {
+        this.mode = mode;
+    }
+
+    /**
+     * To string function.
+     *
+     * @returns {string|*}
+     */
+    toString() {
+        return this.mode;
+    }
+}
+
+/**
+ * The js test test function class.
+ *
+ * @author  Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2018-06-08)
+ */
+class JsTestTestFunction {
+
+    /**
+     * The class constructor.
+     *
+     * @param mode
+     */
+    constructor(testFunction) {
+        this.testFunction = testFunction;
+    }
+}
+
+/**
+ * The js test error function class.
+ *
+ * @author  Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2018-06-08)
+ */
+class JsTestErrorFunction {
+
+    /**
+     * The class constructor.
+     *
+     * @param mode
+     */
+    constructor(errorFunction) {
+        this.errorFunction = errorFunction;
     }
 }
