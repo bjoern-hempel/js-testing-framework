@@ -33,14 +33,14 @@ user$ git push
 var tests = function () {
 
     /* simple success test */
-    new JsSuccessTest([
+    new JsSuccessTest(
         'check 1 + 2',
         new JsTestTestFunction(function () {
             var sum = 1 + 2;
 
             return JsTest.equalInteger(sum, 3);
         })
-    ]);
+    );
 
     /* simple Error test */
     new JsErrorTest(
