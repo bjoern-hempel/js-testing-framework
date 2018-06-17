@@ -28,7 +28,9 @@ class JsTest {
         }, this);
 
         /* start the test */
-        this.start();
+        if (this.constructor.autostart) {
+            this.start();
+        }
     }
 
     /**
@@ -109,7 +111,6 @@ class JsTest {
     errorFunction(error) {
         if (this.code) {
             var code = 'code' in error ? error.code : parseInt(error.message);
-
             return (error instanceof this.errorClass) && this.code === code;
         } else {
             return (error instanceof this.errorClass);
@@ -128,9 +129,12 @@ class JsTest {
 
     /**
      * The function to start the test.
+     *
+     * @param sc
      */
-    start() {
-        this.constructor.increaseCounter();
+    start(sc) {
+        var staticClass = sc ? sc : this.constructor;
+        staticClass.increaseCounter();
 
         /* build class name */
         var className = '';
@@ -140,7 +144,7 @@ class JsTest {
 
         this.log(
             String('%counter) %classRunning %statustest "%message" %mode%code.').
-                replace(/%counter/, String(JsTest.getCounter()).padStart(3)).
+                replace(/%counter/, String(staticClass.getCounter()).padStart(3)).
                 replace(/%class/,   className).
                 replace(/%status/,  this.type          ? this.type + ' '                    : '').
                 replace(/%message/, this.message).
@@ -150,11 +154,11 @@ class JsTest {
         );
 
         /* reset counters */
-        this.constructor.equalObjectInstanceCounter = 0;
-        this.constructor.equalIntegerCounter = 0;
-        this.constructor.equalNumberCounter = 0;
-        this.constructor.equalArrayValuesCounter = 0;
-        this.constructor.equalArrayLengthCounter = 0;
+        staticClass.equalObjectInstanceCounter = 0;
+        staticClass.equalIntegerCounter = 0;
+        staticClass.equalNumberCounter = 0;
+        staticClass.equalArrayValuesCounter = 0;
+        staticClass.equalArrayLengthCounter = 0;
 
         var timeStart = performance.now();
         try {
@@ -173,9 +177,9 @@ class JsTest {
         this.testOK ? this.log(message, 'success') : this.log(message, 'error');
 
         if (!this.testOK) {
-            this.constructor.increaseErrorCounter();
+            staticClass.increaseErrorCounter();
         } else {
-            this.constructor.increaseSuccessCounter();
+            staticClass.increaseSuccessCounter();
         }
     }
 
@@ -275,13 +279,43 @@ class JsTest {
         this.log('─'.repeat(message.length));
         this.log('');
 
+        this.autostart = false;
         this.timeStart = performance.now();
-        [].slice.call(arguments).map(function (argument) {
-            if (typeof argument === 'function') {
-                argument();
-            }
-        });
+
+        // for (var i = 0; i < arguments[0].length; i++) {
+        //     arguments[0][i].start(this);
+        //     console.log(this.getCounter());
+        // }
+
+        this.doTests.apply(this, arguments);
         this.resultTests();
+    }
+
+    /**
+     * Execute all tests.
+     */
+    static doTests() {
+        [].slice.call(arguments).map(function (argument) {
+            switch (true) {
+                case argument instanceof Array:
+                    this.doTests.apply(this, argument);
+                    break;
+
+                case argument instanceof JsTest:
+                    argument.start(this);
+                    break;
+
+                case typeof argument === 'function':
+                    this.autostart = true;
+                    argument(this);
+                    this.autostart = false;
+                    break;
+
+                default:
+                    throw new Error('JsTest.doTests: Unknown argument type.');
+                    break;
+            }
+        }, this);
     }
 
     /**
