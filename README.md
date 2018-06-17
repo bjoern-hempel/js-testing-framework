@@ -48,12 +48,12 @@ The test returns:
 Start test "Simple tests."
 ──────────────────────────
  
-  0) Running success test "check 1 + 2" .
+  1) Running success test "check 1 + 2" .
      → Test succeeded (0.1 ms).
  
 ──────────────────────────────────────────────────────────────
 RESULT
--> All test succeeded (0.7 ms) [success: 0; error: 0; all: 0].
+-> All test succeeded (0.6 ms) [success: 1; error: 0; all: 1].
 ──────────────────────────────────────────────────────────────
 ```
 
@@ -86,16 +86,16 @@ The test returns:
 ──────────────────────────
 Start test "Simple tests."
 ──────────────────────────
-
-  0) Running success test "check 1 + 2" .
-     → Test succeeded (0.2 ms).
-  1) Running success test "check 10 - 2" .
+ 
+  1) Running success test "check 1 + 2" .
      → Test succeeded (0.1 ms).
-
-────────────────────────────────────────────────────────────
+  2) Running success test "check 10 - 2" .
+     → Test succeeded (0 ms).
+ 
+──────────────────────────────────────────────────────────────
 RESULT
--> All test succeeded (1 ms) [success: 0; error: 0; all: 0].
-────────────────────────────────────────────────────────────
+-> All test succeeded (1.1 ms) [success: 2; error: 0; all: 2].
+──────────────────────────────────────────────────────────────
 ```
 
 ## A. Authors
