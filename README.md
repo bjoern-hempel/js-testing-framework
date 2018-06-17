@@ -25,7 +25,7 @@ user$ git commit -m "update the js-testing-framework library submodule" vendor/j
 user$ git push
 ```
 
-## 1. Usage
+## 1. Usage - Basic Examples
 
 ### 1.1 Basic Test Example
 
@@ -129,6 +129,50 @@ Start test "Simple error test."
 ──────────────────────────────────────────────────────────────
 RESULT
 -> All test succeeded (0.7 ms) [success: 1; error: 0; all: 1].
+──────────────────────────────────────────────────────────────
+```
+
+### 1.4 Summary of all tests within a function
+
+Use a function to summerize all tests instead of a JsTest Array:
+
+```javascript
+var tests = function() {
+    new JsSuccessTest(
+        'check 1 + 2',
+        new JsTestTestFunction(function () {
+            var sum = 1 + 2;
+            return JsTest.equalInteger(sum, 3);
+        })
+    );
+
+    new JsSuccessTest(
+        'check 10 - 2',
+        new JsTestTestFunction(function () {
+            var difference = 10 - 2;
+            return JsTest.equalInteger(difference, 8);
+        })
+    );
+};
+
+JsTest.startTests('Simple tests.', tests);
+```
+
+The test returns:
+
+```javascript
+──────────────────────────
+Start test "Simple tests."
+──────────────────────────
+ 
+  1) Running success test "check 1 + 2" .
+     → Test succeeded (0.1 ms).
+  2) Running success test "check 10 - 2" .
+     → Test succeeded (0 ms).
+ 
+──────────────────────────────────────────────────────────────
+RESULT
+-> All test succeeded (1.2 ms) [success: 0; error: 0; all: 0].
 ──────────────────────────────────────────────────────────────
 ```
 
