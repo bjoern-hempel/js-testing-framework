@@ -98,6 +98,42 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
+### 1.3 Error Test Example
+
+Use the error test if you expect an exception as a test result:
+
+```javascript
+var test = new JsErrorTest(
+    'check 1 + 2',
+    100,
+    new JsTestTestFunction(function () {
+        var sum = 1 + 2;
+
+        throw new Error('100 - Simple Error test');
+
+        return JsTest.equalInteger(sum, 3);
+    })
+);
+
+JsTest.startTests('Simple error test.', test);
+```
+
+The test returns
+
+```javascript
+───────────────────────────────
+Start test "Simple error test."
+───────────────────────────────
+ 
+  1) Running error test "check 1 + 2" (Code: 100).
+     → Test succeeded (0.1 ms).
+ 
+──────────────────────────────────────────────────────────────
+RESULT
+-> All test succeeded (0.7 ms) [success: 1; error: 0; all: 1].
+──────────────────────────────────────────────────────────────
+```
+
 ## A. Authors
 
 * Björn Hempel <bjoern@hempel.li> - _Initial work_ - [https://github.com/bjoern-hempel](https://github.com/bjoern-hempel)
