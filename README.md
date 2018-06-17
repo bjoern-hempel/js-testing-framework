@@ -27,48 +27,34 @@ user$ git push
 
 ## 1. Usage
 
-### 1.1 Basic Example
+### 1.1 Basic Test Example
 
 ```javascript
-var tests = function () {
+var test = new JsSuccessTest([
+    'check 1 + 2',
+    new JsTestTestFunction(function () {
+        var sum = 1 + 2;
+        return JsTest.equalInteger(sum, 3);
+    })
+]);
 
-    /* simple success test */
-    new JsSuccessTest(
-        'check 1 + 2',
-        new JsTestTestFunction(function () {
-            var sum = 1 + 2;
+JsTest.startTests('Simple tests.', test);
+```
 
-            return JsTest.equalInteger(sum, 3);
-        })
-    );
+The test returns:
 
-    /* simple Error test */
-    new JsErrorTest(
-        'check 1 + 2',
-        100,
-        new JsTestTestFunction(function () {
-            var sum = 1 + 2;
-
-            throw new Error('100 - Simple Error test');
-
-            return JsTest.equalInteger(sum, 3);
-        })
-    );
-
-    /* simple error test */
-    new JsErrorTest(
-        new JsTestException(100, 'check 1 + 2'),
-        new JsTestTestFunction(function () {
-            var sum = 1 + 2;
-
-            throw new JsTestException(100, 'check 1 + 2');
-
-            return JsTest.equalInteger(sum, 3);
-        })
-    );
-}
-
-JsTest.startTests('Simple tests.', tests);
+```javascript
+──────────────────────────
+Start test "Simple tests."
+──────────────────────────
+ 
+  0) Running success test "check 1 + 2" .
+     → Test succeeded (0.1 ms).
+ 
+──────────────────────────────────────────────────────────────
+RESULT
+-> All test succeeded (0.7 ms) [success: 0; error: 0; all: 0].
+──────────────────────────────────────────────────────────────
 ```
 
 ## A. Authors
