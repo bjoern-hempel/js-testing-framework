@@ -57,6 +57,47 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
+### 1.2 Multiple Test Example
+
+```javascript
+var tests = [
+    new JsSuccessTest(
+        'check 1 + 2',
+        new JsTestTestFunction(function () {
+            var sum = 1 + 2;
+            return JsTest.equalInteger(sum, 3);
+        })
+    ),
+    new JsSuccessTest(
+        'check 10 - 2',
+        new JsTestTestFunction(function () {
+            var difference = 10 - 2;
+            return JsTest.equalInteger(difference, 8);
+        })
+    )
+];
+
+JsTest.startTests('Simple tests.', tests);
+```
+
+The test returns:
+
+```javascript
+──────────────────────────
+Start test "Simple tests."
+──────────────────────────
+
+  0) Running success test "check 1 + 2" .
+     → Test succeeded (0.2 ms).
+  1) Running success test "check 10 - 2" .
+     → Test succeeded (0.1 ms).
+
+────────────────────────────────────────────────────────────
+RESULT
+-> All test succeeded (1 ms) [success: 0; error: 0; all: 0].
+────────────────────────────────────────────────────────────
+```
+
 ## A. Authors
 
 * Björn Hempel <bjoern@hempel.li> - _Initial work_ - [https://github.com/bjoern-hempel](https://github.com/bjoern-hempel)
