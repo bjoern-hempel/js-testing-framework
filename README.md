@@ -134,7 +134,7 @@ RESULT
 
 ### 1.4 Summary of all tests within a function
 
-Use a function to summerize all tests instead of a JsTest Array:
+Use a function to summerize all tests instead of a JsTest Array. Within this function you must mark each test with the JsTestAutostart class, to start the test immediately:
 
 ```javascript
 var tests = function() {
