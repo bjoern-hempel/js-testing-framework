@@ -108,9 +108,7 @@ var test = new JsErrorTest(
     100,
     new JsTestTestFunction(function () {
         var sum = 1 + 2;
-
         throw new Error('100 - Simple Error test');
-
         return JsTest.equalInteger(sum, 3);
     })
 );
