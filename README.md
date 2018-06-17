@@ -100,7 +100,7 @@ RESULT
 
 ### 1.3 Error Test Example
 
-Use the error test if you expect an exception as a test result:
+Use the error test (JsErrorTest) if you expect an exception as a test result:
 
 ```javascript
 var test = new JsErrorTest(
