@@ -143,7 +143,8 @@ var tests = function() {
         new JsTestTestFunction(function () {
             var sum = 1 + 2;
             return JsTest.equalInteger(sum, 3);
-        })
+        }),
+        new JsTestAutostart(this)
     );
 
     new JsSuccessTest(
@@ -151,7 +152,8 @@ var tests = function() {
         new JsTestTestFunction(function () {
             var difference = 10 - 2;
             return JsTest.equalInteger(difference, 8);
-        })
+        }),
+        new JsTestAutostart(this)
     );
 };
 
@@ -168,11 +170,11 @@ Start test "Simple tests."
   1) Running success test "check 1 + 2" .
      → Test succeeded (0.1 ms).
   2) Running success test "check 10 - 2" .
-     → Test succeeded (0 ms).
+     → Test succeeded (0.1 ms).
  
 ──────────────────────────────────────────────────────────────
 RESULT
--> All test succeeded (1.2 ms) [success: 0; error: 0; all: 0].
+-> All test succeeded (3.1 ms) [success: 2; error: 0; all: 2].
 ──────────────────────────────────────────────────────────────
 ```
 
