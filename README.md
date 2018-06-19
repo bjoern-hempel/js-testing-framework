@@ -217,8 +217,8 @@ var test = new JsErrorTest(
             throw new MyOwnException(100, 'The subtrahend is bigger than the minuend.');
         }
 
-        var difference = minuend - subtrahend;
-        return JsTest.equalInteger(difference, 8);
+        /* this point should never be reached */
+        return false;
     })
 );
 
