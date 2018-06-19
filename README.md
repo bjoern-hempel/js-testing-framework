@@ -53,7 +53,7 @@ Start test "Simple tests."
  
 ──────────────────────────────────────────────────────────────
 RESULT
--> All test succeeded (0.6 ms) [success: 1; error: 0; all: 1].
+-> All test succeeded (0.7 ms) [success: 1; error: 0; all: 1].
 ──────────────────────────────────────────────────────────────
 ```
 
