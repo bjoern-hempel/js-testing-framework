@@ -124,11 +124,11 @@ Start test "Simple error test."
 ───────────────────────────────
  
   1) Running error test "check 1 + 2" (Code: 100).
-     → Test succeeded (0.1 ms).
+     → Test succeeded (6 ms).
  
 ──────────────────────────────────────────────────────────────
 RESULT
--> All test succeeded (0.7 ms) [success: 1; error: 0; all: 1].
+-> All test succeeded (6.8 ms) [success: 1; error: 0; all: 1].
 ──────────────────────────────────────────────────────────────
 ```
 
