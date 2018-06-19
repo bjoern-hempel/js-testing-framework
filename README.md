@@ -181,26 +181,11 @@ RESULT
 ```javascript
 /**
  * Own js test exception class.
- *
  */
 class MyOwnException {
-
-    /**
-     * The class constructor.
-     */
     constructor(code, message) {
         this.code = code;
         this.message = message;
-    }
-
-    /**
-     * toString method to create a nice readable message.
-     */
-    toString() {
-        return String('%class: "%message" (%code)').
-            replace('%class', this.constructor.name).
-            replace('%message', this.message).
-            replace('%code', this.code);
     }
 }
 
@@ -217,8 +202,8 @@ var test = new JsErrorTest(
             throw new MyOwnException(100, 'The subtrahend is bigger than the minuend.');
         }
 
-        /* this point should never be reached */
-        return false;
+        var difference = minuend - subtrahend;
+        return JsTest.equalInteger(difference, 8);
     })
 );
 
