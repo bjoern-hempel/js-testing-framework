@@ -134,7 +134,7 @@ RESULT
 
 ### 1.4 Summary of all tests within a function
 
-Use a function to summerize all tests within a function instead of a JsTest Array. Within this function you must mark each test with the JsTestAutostart class, to start the test immediately:
+Use a function container to summerize all tests within a function instead of a JsTest Array:
 
 ```javascript
 var tests = function() {
@@ -143,8 +143,7 @@ var tests = function() {
         new JsTestTestFunction(function () {
             var sum = 1 + 2;
             return JsTest.equalInteger(sum, 3);
-        }),
-        new JsTestAutostart(this)
+        })
     );
 
     new JsSuccessTest(
@@ -152,8 +151,7 @@ var tests = function() {
         new JsTestTestFunction(function () {
             var difference = 10 - 2;
             return JsTest.equalInteger(difference, 8);
-        }),
-        new JsTestAutostart(this)
+        })
     );
 };
 
@@ -166,15 +164,15 @@ The test returns:
 ──────────────────────────
 Start test "Simple tests."
 ──────────────────────────
- 
+
   1) Running success test "check 1 + 2" .
      → Test succeeded (0.1 ms).
   2) Running success test "check 10 - 2" .
-     → Test succeeded (0.1 ms).
- 
+     → Test succeeded (0 ms).
+
 ──────────────────────────────────────────────────────────────
 RESULT
--> All test succeeded (3.1 ms) [success: 2; error: 0; all: 2].
+-> All test succeeded (1.5 ms) [success: 2; error: 0; all: 2].
 ──────────────────────────────────────────────────────────────
 ```
 
