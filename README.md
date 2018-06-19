@@ -90,12 +90,12 @@ Start test "Simple tests."
   1) Running success test "check 1 + 2" .
      → Test succeeded (0.1 ms).
   2) Running success test "check 10 - 2" .
-     → Test succeeded (0 ms).
+     → Test succeeded (0.1 ms).
  
-──────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────
 RESULT
--> All test succeeded (1.1 ms) [success: 2; error: 0; all: 2].
-──────────────────────────────────────────────────────────────
+-> All test succeeded (1 ms) [success: 2; error: 0; all: 2].
+────────────────────────────────────────────────────────────
 ```
 
 ### 1.3 Error Test Example
