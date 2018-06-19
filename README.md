@@ -176,6 +176,72 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
+### 1.5 Use own exception class
+
+```javascript
+/**
+ * Own js test exception class.
+ *
+ */
+class MyOwnException {
+
+    /**
+     * The class constructor.
+     */
+    constructor(code, message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    /**
+     * toString method to create a nice readable message.
+     */
+    toString() {
+        return String('%class: "%message" (%code)').
+            replace('%class', this.constructor.name).
+            replace('%message', this.message).
+            replace('%code', this.code);
+    }
+}
+
+/**
+ * Test function
+ */
+var test = new JsErrorTest(
+    new MyOwnException(100, 'check 10 - 11'),
+    new JsTestTestFunction(function () {
+        var minuend = 10;
+        var subtrahend = 11;
+
+        if (subtrahend > minuend) {
+            throw new MyOwnException(100, 'The subtrahend is bigger than the minuend.');
+        }
+
+        var difference = minuend - subtrahend;
+        return JsTest.equalInteger(difference, 8);
+    })
+);
+
+JsTest.startTests('Simple tests.', test);
+```
+
+The test returns:
+
+```javascript
+──────────────────────────
+Start test "Simple tests."
+──────────────────────────
+
+  1) MyOwnException: Running error test "check 10 - 11" (Code: 100).
+     → Test succeeded: "The subtrahend is bigger than the minuend." (0.2 ms).
+
+──────────────────────────────────────────────────────────────
+RESULT
+-> All test succeeded (0.7 ms) [success: 1; error: 0; all: 1].
+──────────────────────────────────────────────────────────────
+```
+
+
 ## A. Authors
 
 * Björn Hempel <bjoern@hempel.li> - _Initial work_ - [https://github.com/bjoern-hempel](https://github.com/bjoern-hempel)
