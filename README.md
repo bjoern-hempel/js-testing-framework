@@ -232,12 +232,12 @@ The test returns:
 Start test "Simple tests."
 ──────────────────────────
 
-  1) MyOwnException: Running error test "check 10 - 11" (Code: 100).
-     → Test succeeded: "The subtrahend is bigger than the minuend." (0.2 ms).
+  1) Running error test "check 10 - 11" (Code: 100).
+     → Test succeeded: "The subtrahend is bigger than the minuend." (0.1 ms).
 
 ──────────────────────────────────────────────────────────────
 RESULT
--> All test succeeded (0.7 ms) [success: 1; error: 0; all: 1].
+-> All test succeeded (0.8 ms) [success: 1; error: 0; all: 1].
 ──────────────────────────────────────────────────────────────
 ```
 
