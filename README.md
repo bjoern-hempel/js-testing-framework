@@ -176,7 +176,7 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
-### 1.5 Use own exception class
+### 1.5 Use your own exception class
 
 ```javascript
 /**
