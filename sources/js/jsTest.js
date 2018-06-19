@@ -34,6 +34,7 @@ class JsTest {
         this.originClass = null;
         this.testOK = false;
         this.errorClass = Error;
+        this.testMessage = null;
 
         [].forEach.call(arguments, function (argument) {
             this.doArgument(argument);
@@ -91,6 +92,17 @@ class JsTest {
 
             /* object (class) given */
             case typeof argument === 'object':
+                if (argument.constructor.name.match(/Exception/)) {
+                    this.errorClass = eval(argument.constructor.name);
+                    this.code = argument.code;
+
+                    if (argument.message) {
+                        this.message = argument.message;
+                    }
+
+                    break;
+                }
+
                 this.originClass = argument;
                 break;
 
@@ -124,9 +136,28 @@ class JsTest {
         if (this.code) {
             var code = 'code' in error ? error.code : parseInt(error.message);
 
-            return (error instanceof this.errorClass) && this.code === code;
+            if (!(error instanceof this.errorClass)) {
+                this.testMessage = 'Different error exception class';
+                return false;
+            }
+
+            if (this.code !== code) {
+                this.testMessage = String('The error code is not the expected one (thrown: %codeThrown; expected: %codeExpected).').
+                    replace('%codeThrown', code).
+                    replace('%codeExpected', this.code);
+                return false;
+            }
+
+            this.testMessage = error.message ? error.message : 'The thrown exception is the expected one.';
+            return true;
         } else {
-            return (error instanceof this.errorClass);
+            if (!(error instanceof this.errorClass)) {
+                this.testMessage = 'Different error exception class';
+                return false;
+            }
+
+            this.testMessage = error.message ? error.message : 'The thrown exception is the expected one.';
+            return true;
         }
     }
 
@@ -180,9 +211,9 @@ class JsTest {
 
         var timeNeeded = Math.round((timeFinished - timeStart) * 100000) / 100000;
 
-        var message = this.testOK ? 'Test succeeded (%time).' : 'Test failed (%time).';
+        var message = this.testOK ? 'Test succeeded%message (%time).' : 'Test failed%message (%time).';
 
-        message = '     → ' + message.replace('%time', timeNeeded + ' ms');
+        message = '     → ' + message.replace('%message', this.testMessage ? ': "' + this.testMessage + '"' : '').replace('%time', timeNeeded + ' ms');
 
         this.testOK ? this.log(message, 'success') : this.log(message, 'error');
 
