@@ -1,4 +1,16 @@
 /**
+ * Static variable container for the class JsTest
+ */
+let staticContainerJsTest = {
+    autostart: false,
+    equalObjectInstanceCounter: 0,
+    equalIntegerCounter: 0,
+    equalNumberCounter: 0,
+    equalArrayValuesCounter: 0,
+    equalArrayLengthCounter: 0
+}
+
+/**
  * The js test class.
  *
  * @author  Björn Hempel <bjoern@hempel.li>
@@ -28,7 +40,7 @@ class JsTest {
         }, this);
 
         /* start the test */
-        if (this.constructor.autostart) {
+        if (staticContainerJsTest.autostart) {
             this.start();
         }
     }
@@ -152,11 +164,11 @@ class JsTest {
         );
 
         /* reset counters */
-        this.constructor.equalObjectInstanceCounter = 0;
-        this.constructor.equalIntegerCounter = 0;
-        this.constructor.equalNumberCounter = 0;
-        this.constructor.equalArrayValuesCounter = 0;
-        this.constructor.equalArrayLengthCounter = 0;
+        staticContainerJsTest.equalObjectInstanceCounter = 0;
+        staticContainerJsTest.equalIntegerCounter = 0;
+        staticContainerJsTest.equalNumberCounter = 0;
+        staticContainerJsTest.equalArrayValuesCounter = 0;
+        staticContainerJsTest.equalArrayLengthCounter = 0;
 
         var timeStart = performance.now();
         try {
@@ -195,33 +207,33 @@ class JsTest {
      * Increases the test counter.
      */
     static increaseCounter() {
-        if (typeof this.counter === 'undefined') {
-            this.counter = 0;
+        if (typeof staticContainerJsTest.counter === 'undefined') {
+            staticContainerJsTest.counter = 0;
         }
 
-        this.counter++;
+        staticContainerJsTest.counter++;
     }
 
     /**
      * Increases the test counter.
      */
     static increaseSuccessCounter() {
-        if (typeof this.successCounter === 'undefined') {
-            this.successCounter = 0;
+        if (typeof staticContainerJsTest.successCounter === 'undefined') {
+            staticContainerJsTest.successCounter = 0;
         }
 
-        this.successCounter++;
+        staticContainerJsTest.successCounter++;
     }
 
     /**
      * Increases the error counter.
      */
     static increaseErrorCounter() {
-        if (typeof this.errorCounter === 'undefined') {
-            this.errorCounter = 0;
+        if (typeof staticContainerJsTest.errorCounter === 'undefined') {
+            staticContainerJsTest.errorCounter = 0;
         }
 
-        this.errorCounter++;
+        staticContainerJsTest.errorCounter++;
     }
 
     /**
@@ -230,7 +242,7 @@ class JsTest {
      * @returns {number}
      */
     static getCounter() {
-        return typeof this.counter === 'undefined' ? 0 : this.counter;
+        return typeof staticContainerJsTest.counter === 'undefined' ? 0 : staticContainerJsTest.counter;
     }
 
     /**
@@ -239,7 +251,7 @@ class JsTest {
      * @returns {number}
      */
     static getSuccessCounter() {
-        return typeof this.successCounter === 'undefined' ? 0 : this.successCounter;
+        return typeof staticContainerJsTest.successCounter === 'undefined' ? 0 : staticContainerJsTest.successCounter;
     }
 
     /**
@@ -248,7 +260,7 @@ class JsTest {
      * @returns {number}
      */
     static getErrorCounter() {
-        return typeof this.errorCounter === 'undefined' ? 0 : this.errorCounter;
+        return typeof staticContainerJsTest.errorCounter === 'undefined' ? 0 : staticContainerJsTest.errorCounter;
     }
 
     /**
@@ -287,7 +299,7 @@ class JsTest {
      */
     static doTests() {
         [].slice.call(arguments).map(function (argument) {
-            this.autostart = false;
+            staticContainerJsTest.autostart = false;
             switch (true) {
                 case argument instanceof Array:
                     this.doTests.apply(this, argument);
@@ -298,7 +310,7 @@ class JsTest {
                     break;
 
                 case typeof argument === 'function':
-                    this.autostart = true;
+                    staticContainerJsTest.autostart = true;
                     argument();
                     break;
 
@@ -307,7 +319,7 @@ class JsTest {
                     break;
             }
         }, this);
-        this.autostart = false;
+        staticContainerJsTest.autostart = false;
     }
 
     /**
@@ -345,7 +357,7 @@ class JsTest {
      * @returns {boolean}
      */
     static equalObjectInstance(obj, instance, message) {
-        var counter = message ? 0 : ++this.equalObjectInstanceCounter;
+        var counter = message ? 0 : ++staticContainerJsTest.equalObjectInstanceCounter;
         var message = message ? message : String('     The %counter. equalObjectInstance test failed.').replace(/%counter/, counter)
 
         if (!(obj instanceof instance)) {
@@ -365,7 +377,7 @@ class JsTest {
      * @returns {boolean}
      */
     static equalInteger(integer1, integer2, message) {
-        var counter = message ? 0 : ++this.equalIntegerCounter;
+        var counter = message ? 0 : ++staticContainerJsTest.equalIntegerCounter;
         var message = message ? message : String('     The %counter. equalInteger test failed.').replace(/%counter/, counter);
 
         if (!Number.isInteger(integer1)) {
@@ -395,7 +407,7 @@ class JsTest {
      * @returns {boolean}
      */
     static equalNumber(number1, number2, digits, message) {
-        var counter = message ? 0 : ++this.equalNumberCounter;
+        var counter = message ? 0 : ++staticContainerJsTest.equalNumberCounter;
         var message = message ? message : String('     The %counter. equalNumber test failed.').replace(/%counter/, counter);
 
         if (!this.isNumber(number1)) {
@@ -427,7 +439,7 @@ class JsTest {
      * @returns {boolean}
      */
     static equalArrayValues(array1, array2, message) {
-        var counter = message ? 0 : ++this.equalArrayValuesCounter;
+        var counter = message ? 0 : ++staticContainerJsTest.equalArrayValuesCounter;
         var message = message ? message : String('     The %counter. equalArrayValues test failed.').replace(/%counter/, counter);
 
         if (!(array1 instanceof Array)) {
@@ -469,7 +481,7 @@ class JsTest {
      * @returns {boolean}
      */
     static equalArrayLength(array, size, message) {
-        var counter = message ? 0 : ++this.equalArrayLengthCounter;
+        var counter = message ? 0 : ++staticContainerJsTest.equalArrayLengthCounter;
         var message = message ? message : String('     The %counter. equalArrayLength test failed.').replace(/%counter/, counter);
 
         if (!this.equalObjectInstance(array, Array, message)) {
