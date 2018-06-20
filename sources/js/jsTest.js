@@ -7,7 +7,18 @@ let staticContainerJsTest = {
     equalIntegerCounter: 0,
     equalNumberCounter: 0,
     equalArrayValuesCounter: 0,
-    equalArrayLengthCounter: 0
+    equalArrayLengthCounter: 0,
+    options: {
+        outputConsole:     true,
+        outputDocument:    true,
+        outputId:          'testResult',
+        outputEntryStyle:  {
+            fontSize: '10px',
+            fontStyle: 'italic',
+            margin: 0
+        },
+        outputSectionStyle: null
+    }
 }
 
 /**
@@ -232,6 +243,45 @@ class JsTest {
      */
     log(logValue, type) {
         this.constructor.log(logValue, type);
+    }
+
+    /**
+     * Convert given object to string.
+     *
+     * @param object
+     * @returns {*|string}
+     */
+    static convertObjectToString(object) {
+        var string = '';
+
+        switch (true) {
+            case typeof object === 'object':
+                for (var name in object) {
+                    string += name.replace(/([A-Z])/, '-$1').toLowerCase() + ': ' + object[name] + '; ';
+                }
+                break;
+
+            case typeof object === 'string':
+                string = object;
+                break;
+
+            default:
+                string = '';
+                break;
+        }
+
+        return string;
+    }
+
+    /**
+     * Set test options.
+     *
+     * @param options
+     */
+    static setOptions(options) {
+        for (var name in options) {
+            staticContainerJsTest.options[name] = options[name];
+        }
     }
 
     /**
@@ -584,23 +634,35 @@ class JsTest {
      * @param style
      */
     static doLog(consoleType, logValue, style) {
-        style = style + 'font-size: 10px; font-style: italic; margin: 0;';
 
-        setTimeout(consoleType.bind(console, '%c' + logValue, style));
+        style = style + this.convertObjectToString(staticContainerJsTest.options.outputEntryStyle);
 
-        if (document.getElementById('testResult') === null) {
-            var div = document.createElement('div');
-            div.setAttribute('id', 'testResult');
-
-            document.body.appendChild(div);
+        if (staticContainerJsTest.options.outputConsole) {
+            setTimeout(consoleType.bind(console, '%c' + logValue, style));
         }
 
-        var pre = document.createElement('pre');
+        if (staticContainerJsTest.options.outputDocument) {
+            if (document.getElementById(staticContainerJsTest.options.outputId) === null) {
+                var div = document.createElement('div');
+                div.setAttribute('id', staticContainerJsTest.options.outputId);
 
-        pre.setAttribute('style', style);
-        pre.innerHTML = logValue ? logValue : ' ';
+                document.body.appendChild(div);
+            }
 
-        document.getElementById('testResult').appendChild(pre);
+            if (staticContainerJsTest.options.outputSectionStyle) {
+                document.getElementById(staticContainerJsTest.options.outputId).setAttribute(
+                    'style',
+                    this.convertObjectToString(staticContainerJsTest.options.outputSectionStyle)
+                );
+            }
+
+            var pre = document.createElement('pre');
+
+            pre.setAttribute('style', style);
+            pre.innerHTML = logValue ? logValue : ' ';
+
+            document.getElementById(staticContainerJsTest.options.outputId).appendChild(pre);
+        }
     }
 }
 
