@@ -260,8 +260,6 @@ var test = new JsSuccessTest([
             return value + vector2[index];
         });
 
-        console.log(addedVector.length);
-
         return (
             JsTest.equalInteger(addedVector.length, 2) &&
             JsTest.equalArrayValues(addedVector, [3, 5])
