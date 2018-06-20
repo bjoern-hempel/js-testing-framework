@@ -27,7 +27,28 @@ user$ git push
 
 ## 1. Usage - Basic Examples
 
-### 1.1 Basic Test Example
+### 1.1 Set options (optional)
+
+```javascript
+JsTest.setOptions({
+    outputConsole: true,
+    outputDocument: true,
+    outputId: 'test-output',
+    outputEntryStyle: {
+        fontSize: '10px',
+        fontStyle: 'italic',
+        margin: 0
+    },
+    outputSectionStyle: {
+        border: '1px solid grey',
+        padding: '10px',
+        margin:  '10px',
+        backgroundColor: '#f0f0f0'
+    }
+});
+```
+
+### 1.2 Basic Test Example
 
 ```javascript
 var test = new JsSuccessTest([
@@ -57,7 +78,7 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
-### 1.2 Multiple Test Example
+### 1.3 Multiple Test Example
 
 ```javascript
 var tests = [
@@ -98,7 +119,7 @@ RESULT
 ────────────────────────────────────────────────────────────
 ```
 
-### 1.3 Error Test Example
+### 1.4 Error Test Example
 
 Use the error test (JsErrorTest) if you expect an exception as a test result:
 
@@ -132,7 +153,7 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
-### 1.4 Summary of all tests within a function
+### 1.5 Summary of all tests within a function
 
 Use a function container to summerize all tests within a function instead of a JsTest Array:
 
@@ -176,7 +197,7 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
-### 1.5 Use your own exception class
+### 1.6 Use your own exception class
 
 ```javascript
 /**
