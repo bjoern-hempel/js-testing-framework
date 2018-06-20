@@ -287,6 +287,46 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
+#### 1.7.1 If on property check fails
+
+```javascript
+var test = new JsSuccessTest([
+    'vector add test',
+    new JsTestTestFunction(function () {
+        var vector1 = [1, 2];
+        var vector2 = [2, 3];
+
+        var addedVector = vector1.map(function (value, index) {
+            return value + vector2[index];
+        });
+
+        return (
+            JsTest.equalInteger(addedVector.length, 2) &&
+            JsTest.equalArrayValues(addedVector, [3, 6])
+        );
+    })
+]);
+
+JsTest.startTests('Simple tests.', test);
+```
+
+The test returns:
+
+```javascript
+──────────────────────────
+Start test "Simple tests."
+──────────────────────────
+
+  1) Running success test "vector add test" .
+     The 1. equalArrayValues test failed.
+     → Test failed (0.6 ms).
+
+─────────────────────────────────────────
+RESULT
+-> At least on test failed (1.6 ms) [1/1]
+─────────────────────────────────────────
+```
+
 
 ## A. Authors
 
