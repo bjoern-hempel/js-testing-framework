@@ -247,6 +247,48 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
+### 1.7 Test different properties
+
+```javascript
+var test = new JsSuccessTest([
+    'vector add test',
+    new JsTestTestFunction(function () {
+        var vector1 = [1, 2];
+        var vector2 = [2, 3];
+
+        var addedVector = vector1.map(function (value, index) {
+            return value + vector2[index];
+        });
+
+        console.log(addedVector.length);
+
+        return (
+            JsTest.equalInteger(addedVector.length, 2) &&
+            JsTest.equalArrayValues(addedVector, [3, 5])
+        );
+    })
+]);
+
+JsTest.startTests('Simple tests.', test);
+```
+
+The test returns:
+
+```javascript
+
+──────────────────────────
+Start test "Simple tests."
+──────────────────────────
+
+  1) Running success test "vector add test" .
+     → Test succeeded (3 ms).
+
+──────────────────────────────────────────────────────────────
+RESULT
+-> All test succeeded (4.1 ms) [success: 1; error: 0; all: 1].
+──────────────────────────────────────────────────────────────
+```
+
 
 ## A. Authors
 
