@@ -287,7 +287,7 @@ RESULT
 ──────────────────────────────────────────────────────────────
 ```
 
-#### 1.7.1 If on property check fails
+#### 1.7.1 If one property check fails
 
 ```javascript
 var test = new JsSuccessTest([
