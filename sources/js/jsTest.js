@@ -484,6 +484,7 @@ class JsTest {
      *
      * @param {Integer} integer1
      * @param {Integer} integer2
+     * @param {Integer} digits
      * @param {String=} message (optional)
      * @returns {boolean}
      */
@@ -492,11 +493,13 @@ class JsTest {
         var message = message ? message : String('     The %counter. equalNumber test failed.').replace(/%counter/, counter);
 
         if (!this.isNumber(number1)) {
+            console.log(number1);
             this.log(message, 'error');
             return false;
         }
 
         if (!this.isNumber(number2)) {
+            console.log(number2);
             this.log(message, 'error');
             return false;
         }
@@ -516,10 +519,11 @@ class JsTest {
      *
      * @param {Array} array1
      * @param {Array} array2
+     * @param {Integer=} digits (optional)
      * @param {String=} message (optional)
      * @returns {boolean}
      */
-    static equalArrayValues(array1, array2, message) {
+    static equalArrayValues(array1, array2, digits, message) {
         var counter = message ? 0 : ++staticContainerJsTest.equalArrayValuesCounter;
         var message = message ? message : String('     The %counter. equalArrayValues test failed.').replace(/%counter/, counter);
 
@@ -540,13 +544,22 @@ class JsTest {
 
         for (var i = 0; i < array1.length; i++) {
             if (array1[i] instanceof Array && array2[i] instanceof Array) {
-                if (!this.equalArrayValues(array1[i], array2[i], message)) {
+                if (!this.equalArrayValues(array1[i], array2[i], digits, message)) {
                     this.log(message, 'error');
                     return false;
                 }
-            } else if (array1[i] != array2[i]) {
-                this.log(message, 'error');
-                return false;
+            } else {
+                if (digits) {
+                    if (!this.equalNumber(array1[i], array2[i], digits)) {
+                        this.log(message, 'error');
+                        return false;
+                    }
+                } else {
+                    if (array1[i] != array2[i]) {
+                        this.log(message, 'error');
+                        return false;
+                    }
+                }
             }
         }
 
